@@ -1,3 +1,8 @@
+/*
+Author : hubenchang0515@outlook.com
+Date   : 2016-6-20
+*/
+
 #include <windows.h>
 #include <conio.h>
 #include <stdio.h>

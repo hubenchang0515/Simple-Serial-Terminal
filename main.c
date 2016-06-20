@@ -14,16 +14,23 @@ struct PortState
 
 HANDLE hCom;
 struct PortState setting;
-void Init(const char* file);
+void config(const char* file);
+void Init(void);
 DWORD WINAPI Transmit(LPVOID lpParam);
 DWORD WINAPI Receive(LPVOID lpParam);
 
 int main(int argc,char* argv[])
 {
 	if(argc == 1)
-		Init("config.ini");
+	{
+		config("config.ini");
+		Init();
+	}
 	else if(argc == 2)
-		Init(argv[1]);
+	{
+		config(argv[1]);
+		Init();
+	}
 	else
 	{
 		printf("Arguments is too many.\n");
@@ -91,11 +98,9 @@ void config(const char* file)
 	}
 }
 
-void Init(const char* file)
+void Init(void)
 {
 	printf("Simple Serial Terminal(hubenchang0515@outlook.com)\n");
-
-	config(file);
 
 		/* 打开串口 */
 	hCom = CreateFile(setting.nCom,
@@ -156,7 +161,7 @@ DWORD WINAPI Receive(LPVOID lpParam)
 	COMSTAT state;
 	OVERLAPPED read_lapped = {0};
 	char str[1024];
-	SetCommMask(hCom,EV_RXCHAR);
+	read_lapped.hEvent = CreateEvent(NULL,TRUE,FALSE,NULL);
 	while(1)
 	{
 		memset(str,0,1024);
